@@ -1,14 +1,16 @@
-import Image from 'next/image'
-import Card from './components/Card'
 import AddTodo from './components/AddTodo'
+import TodoSection from './components/TodoSection'
 
 export default function Home() {
   return (
     <> 
-      <main className='flex flex-col justify-center'>
-        <AddTodo/>
+      <AddTodo/>
+      <main className='flex justify-center gap-4'>
         
-        <Card/>
+        {/* <Card/> */}
+        <TodoSection title='Pendente' iconId={0}/>
+        <TodoSection title='Em andamento' iconId={1}/>
+        <TodoSection title='Concluidos' iconId={2}/>
       </main>
     </>
   )
