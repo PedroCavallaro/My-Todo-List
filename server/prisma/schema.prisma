@@ -22,7 +22,7 @@ model ToDo {
   description String
   todoStatus  ToDoStatus @relation(fields: [statusId], references: [id])
   user        User       @relation(fields: [userId], references: [id])
-  statusId    String
+  statusId    String     @default("4e7b0462-c58a-472d-98b2-5467c53a2420")
   userId      String
 }
 
