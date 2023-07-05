@@ -51,7 +51,8 @@ export default function Card(CardProps: CardProps) {
             e.currentTarget.style.left = `${0}px`
             e.currentTarget.style.top = `${0}px`
             e.currentTarget.style.zIndex = ""
-        }}
+        }}   
+        
         >
             <div className={`bg-${CardProps.color} h-4 w-28 ml-3 mt-3 rounded-full`}></div>
             <div className="flex gap-12">
