@@ -4,8 +4,8 @@ import {useForm} from "react-hook-form"
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod"
 import { api } from "../lib/api";
-import Card from "./Card";
 import { TodosStructure } from "../page";
+import Login from "./Login";
 
 
 const schema = z.object({
@@ -48,23 +48,26 @@ export default function AddTodo({handler}: HandleNewToDo) {
             <form 
             onSubmit={handleSubmit(async ({todo})=>{
                 const newTodo: TodosStructure ={
+    
                     description: todo,
                     todoStatus:{
                         description: "Pendente" 
                     }
                 }
-
+                
                 createToDo(todo)
                 HandlerNewToDo(newTodo)
                 reset()
             })}
-            className="flex flex-col justify-center items-center gap-3 h-[10rem] select-none">
+            className="flex flex-col justify-center items-center gap-3 h-[10rem] relative select-none">
+                <Login/>        
                 <h2 className="text-2xl">Adicionar nova tarefa</h2>
-                <label htmlFor=""
+                <label htmlFor="addToDO"
                 className="">   
                     <Input 
                     {...register("todo")}
                     type="text" 
+                    id="addToDO"
                     placeholder="Dar banho no cachorro..."
                     className="p-1 outline-none shadow-lg w-[25rem] h-9 rounded-l-lg"/>
                     <Input type="submit" value="Salvar" 

@@ -15,6 +15,7 @@ export async function TodoRoutes(app: FastifyInstance){
                 userId: id
             },
             select:{
+                id:true,
                 description:true,
                 todoStatus:{
                     select:{

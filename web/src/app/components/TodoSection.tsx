@@ -14,17 +14,18 @@ interface TodoSectionProps{
 const colors = [
     {
         title: "Pendente",
-        color: "red-400"
+        color: "bg-red-400"
     },
     {
         title: "Em andamento",
-        color: "yellow-400"
+        color: "bg-yellow-400"
     },
     {
         title: "Concluidos",
         color: "green-400"
     },
 ]
+
 const IconsArray: JSX.Element[] = [
     <Clock1 
     className='w-7 h-7'
@@ -56,15 +57,15 @@ export default function TodoSection(TodoSectionProps: TodoSectionProps) {
                             let color = colors.find(e => e.title === toDo.todoStatus.description)
                             if(toDo.todoStatus.description === TodoSectionProps.title)
                             return (
-                                <>
+                                
                                     <Card 
                                     handleUpdate={TodoSectionProps.handleUpdateTodo}
                                     color={color!.color}
-                                    key={Math.random().toString()}
+                                    key={index.toString()}
                                     toDo={toDo.description} 
                                     status={toDo.todoStatus.description}
                                     />
-                                </>
+                                
                             )
                         })
                     }

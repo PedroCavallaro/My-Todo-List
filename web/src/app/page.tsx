@@ -5,10 +5,10 @@ import { useState, useMemo, useEffect } from 'react';
 import { api } from './lib/api';
 
 export interface TodosStructure{
-  description: string,                  
-  todoStatus:{
-      description: string
-  }
+    description: string,                  
+    todoStatus:{
+        description: string
+    }
 }
 
 export default function Home() {
