@@ -11,10 +11,12 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  username String
-  password String
-  ToDo     ToDo[]
+  id      String @id @default(uuid())
+  name    String @default("")
+  picture String @default("")
+  email   String @default("")
+  sub     String @default("")
+  ToDo    ToDo[]
 }
 
 model ToDo {

@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
-import { string, z } from "zod"
+import { z } from "zod"
 
 export async function TodoRoutes(app: FastifyInstance){
     app.get("/todos/:id", async (req)=>{

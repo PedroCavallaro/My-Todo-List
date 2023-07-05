@@ -6,31 +6,17 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { User } from "lucide-react";
 import { api } from "../lib/api";
 
-interface CredentialResponse{
-    name: string,
-    picture: string,
-    email: string
-}
 
 export default function Login() {
     const login = useGoogleLogin({
         onSuccess: async token => {
+            const { access_token } = token
+            
             await api.post("/auth", {
-                token
+                code: access_token
             })
-         
-            // try{
-            //     const data = await axios.get(
-            //         "https://www.googleapis.com/oauth2/v3/userinfo",{
-            //         headers:{
-            //             "Authorization": `Bearer ${token.access_token}`
-            //         }
-            //     })
-           
-            //     console.log(data.data)
-            // }catch(err){
-            //     console.log(err)
-            // }
+            
+            console.log(access_token)
         }
     })
 

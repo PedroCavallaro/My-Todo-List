@@ -19,9 +19,7 @@ function locateCard(e: MouseEvent){
     }
     return ""
 }
-export default function Card(CardProps: CardProps) {
-    console.log(CardProps.color)
-    
+export default function Card(CardProps: CardProps) {    
     return(
         <>
         <div className=" bg-white h-32 w-52 rounded-3xl shadow-xl flex overflow-hidden justify-start flex-col gap-7 cursor-grab"

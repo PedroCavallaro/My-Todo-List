@@ -32,7 +32,7 @@ export default function Home() {
   const [toDos, setToDos] = useState<TodosStructure[]>([])
 
   const memo = useMemo(async ()=>{
-      await api.get("/todos/4febfbd1-31f1-4e7e-a4f5-d696104e73d3")
+      await api.get("/todos/0fa4421a-bbb4-48ed-a585-e794502935e4")
       .then((res) => setToDos(res.data))
   },[])
 
