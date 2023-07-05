@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
-import { z } from "zod"
+import { string, z } from "zod"
 
 export async function TodoRoutes(app: FastifyInstance){
     app.get("/todos/:id", async (req)=>{
@@ -42,5 +42,12 @@ export async function TodoRoutes(app: FastifyInstance){
         })
 
         return newTodo
+    })
+    app.put("/todo/:id", async (req)=>{
+        const schema = z.object({
+            userId: z.string().uuid(),
+            descripition: z.string(),
+            statusId: z.string()
+        })
     })
 }
