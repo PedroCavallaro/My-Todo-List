@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <> 
       <AddTodo handler={setNewTodo}/>
-      <main className='flex justify-center gap-4'>
+      <main className='flex justify-center gap-4 '>
      
         <TodoSection title='Pendente'  
         handleUpdateTodo={updateToDo} 

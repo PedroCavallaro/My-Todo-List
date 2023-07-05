@@ -22,7 +22,7 @@ const colors = [
     },
     {
         title: "Concluidos",
-        color: "green-400"
+        color: "bg-green-400"
     },
 ]
 
