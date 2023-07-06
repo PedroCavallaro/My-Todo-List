@@ -5,16 +5,16 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { User } from "lucide-react";
 import { api } from "../lib/api";
 import jwtDecode from "jwt-decode";
-import { NextResponse } from "next/server";
-
+import Cookies from "js-cookie"
 
 interface userInfo{
-    name: string,
-    picture: string,
+    name: string | undefined,
+    picture: string | undefined,
+    handler: Function
 }
 
 
-export default function Login() {
+export default function Login({name, picture, handler}: userInfo) {
     const login = useGoogleLogin({
         onSuccess: async token => {
             const { access_token } = token
@@ -23,26 +23,32 @@ export default function Login() {
                 code: access_token
             })  
             .then(({data}) => {
-                setUserInfo(jwtDecode(data))
-               
+                Cookies.set("token", data, {
+                    expires: 30
+                })
+                handler(jwtDecode(data))
             })
         }
-    })
-    
-    const [userInfo, setUserInfo] = useState<userInfo>()
-   
-        
+    })        
     return(
         <>
-        {userInfo ? 
+        {name ? 
         (
             <div className="flex items-center gap-3 text-right mr-5">
                 <div>
-                    <p className="">{`Olá ${userInfo?.name}`}</p>
-                    <p className="text-red-400 cursor-pointer hover:text-red-600 transition-all">Logout</p>
+                    <p className="">{`Olá ${name}`}</p>
+                    <button className="text-red-400 cursor-pointer hover:text-red-600 transition-all"
+                    onClick={()=> {
+                        Cookies.remove("token")
+                        handler("")
+                    }}
+                    >
+                    Sair
+                    </button>
                 </div>
                 <div className="flex w-14 h-14 items-center justify-center rounded-full bg-white border-1 border-black overflow-hidden">
-                    <img src={userInfo!.picture} width={900} height={900} alt="user Picture"/>
+                     {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={picture} width={900} height={900} alt="user Picture"/>
                 </div>
             </div>
         ) : (
@@ -50,8 +56,8 @@ export default function Login() {
                 <p className="hover:text-gray-900 cursor-pointer ">Faça seu login</p>
                 <div className="flex w-10 h-10 items-center justify-center rounded-full bg-white border-2 border-black">
                     <button
-                    // @ts-ignore
-                    onClick={login}
+                
+                    onClick={ ()=> login()}
                     >
                         <User/>
                     </button>

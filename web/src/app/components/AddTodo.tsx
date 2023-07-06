@@ -7,6 +7,7 @@ import { api } from "../lib/api";
 import { TodosStructure } from "../page";
 import Login from "./Login";
 import { GoogleOAuthProvider } from "@react-oauth/google"
+import Cookies from "js-cookie";
 
 
 const schema = z.object({
@@ -17,9 +18,14 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 async function createToDo(description: string){
+    let token = Cookies.get("token")
     await api.post("/todos", {
             description,
-            id: "a6290ed9-6d33-43e1-a767-aacd8ce5fd05"
+    },
+    {
+        headers:{
+            "Authorization": `Bearer ${token}`
+        }
     })
 }
 
@@ -61,11 +67,6 @@ export default function AddTodo({handler}: HandleNewToDo) {
                 reset()
             })}
             className="flex flex-col justify-center items-center gap-2 h-[10rem] relative select-none">
-                <div className="w-[100%] flex justify-end h-[2rem]">
-                <GoogleOAuthProvider clientId="388645190987-ehus75pnbprlu662kmhjidimqd4obget.apps.googleusercontent.com">
-                    <Login/>        
-                </GoogleOAuthProvider>
-                </div>
                 <div className="flex flex-col justify-center items-center gap-2">
                     <h2 className="text-2xl">Adicionar nova tarefa</h2>
                     <label htmlFor="addToDO"

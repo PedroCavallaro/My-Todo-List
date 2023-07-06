@@ -3,20 +3,21 @@ import { prisma } from "../lib/prisma";
 import { z } from "zod"
 
 export async function TodoRoutes(app: FastifyInstance){
-    // app.addHook("preHandler", async (req)=> {
-    //      //    await req.jwtVerify()
-    // })
-    
-    app.get("/todos/:id", async (req)=>{
-        const schema = z.object({
-            id: z.string().uuid()
-        }) 
-    
-        const { id } = schema.parse(req.params)
+    app.addHook("preHandler", async (req)=> {
+            await req.jwtVerify()
+    })
 
+    app.get("/todos", async (req)=>{
+
+        const user = await prisma.user.findUnique({
+            where:{
+                id: req.user.sub
+            }
+        })
+      
         const toDos = await prisma.toDo.findMany({
             where:{
-                userId: id
+                userId: user?.id,
             },
             select:{
                 id:true,
@@ -32,16 +33,20 @@ export async function TodoRoutes(app: FastifyInstance){
     })
     app.post("/todos",async (req) => {
         const schema = z.object({
-            id: z.string().uuid(),
             description: z.string()
         })
 
-        const {id, description} = schema.parse(req.body)
-
+        const { description } = schema.parse(req.body)
+        const user = await prisma.user.findUnique({
+            where:{
+                id: req.user.sub
+            }
+        })
+      
         const newTodo = await prisma.toDo.create({
             data:{
                 description,
-                userId: id,
+                userId: user!.id,
                 statusId: "86d66a26-cb64-4cb6-8167-0cfe7efc2d14"
             }
         })
