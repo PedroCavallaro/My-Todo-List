@@ -4,9 +4,6 @@ import {useForm} from "react-hook-form"
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod"
 import { api } from "../lib/api";
-import { TodosStructure } from "../page";
-import Login from "./Login";
-import { GoogleOAuthProvider } from "@react-oauth/google"
 import Cookies from "js-cookie";
 
 
@@ -54,9 +51,11 @@ export default function AddTodo({handler}: HandleNewToDo) {
         <>
             <form 
             onSubmit={handleSubmit(async ({todo})=>{  
-                await createToDo(todo)
-                HandlerNewToDo()
-                reset()
+                if(Cookies.get("token")){
+                    await createToDo(todo)
+                    HandlerNewToDo()
+                    reset()
+                }
             })}
             className="flex flex-col justify-center items-center gap-2 h-[10rem] relative select-none">
                 <div className="flex flex-col justify-center items-center gap-2">
