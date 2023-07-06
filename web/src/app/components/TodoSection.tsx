@@ -8,7 +8,8 @@ interface TodoSectionProps{
     title: string,
     iconId: number,
     toDos: TodosStructure[],
-    handleUpdateTodo: Function
+    handleUpdateTodo: Function,
+    handleDelet: Function
 }
 
 const colors = [
@@ -54,12 +55,15 @@ export default function TodoSection(TodoSectionProps: TodoSectionProps) {
                 <div className='flex flex-wrap justify-center gap-4 mt-3'>
                     {
                         TodoSectionProps.toDos.map((toDo, index) => {
+                          
                             let color = colors.find(e => e.title === toDo.todoStatus.description)
                             if(toDo.todoStatus.description === TodoSectionProps.title)
-                            return (
+                                return (
                                 
                                     <Card 
+                                    id={toDo.id}    
                                     handleUpdate={TodoSectionProps.handleUpdateTodo}
+                                    handleDelet={TodoSectionProps.handleDelet}
                                     color={color!.color}
                                     key={index.toString()}
                                     toDo={toDo.description} 

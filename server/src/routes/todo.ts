@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
-import { z } from "zod"
+import { string, z } from "zod"
 
 export async function TodoRoutes(app: FastifyInstance){
     app.addHook("preHandler", async (req)=> {
@@ -53,11 +53,46 @@ export async function TodoRoutes(app: FastifyInstance){
 
         return newTodo
     })
-    app.put("/todo/:id", async (req)=>{
+    app.put("/todos", async (req)=>{
         const schema = z.object({
-            userId: z.string().uuid(),
-            descripition: z.string(),
-            statusId: z.string()
+            id: z.string().uuid(),
+            status: z.string()
         })
+
+        const {id, status} = schema.parse(req.body)
+        
+        
+        const statusInfo = await prisma.toDoStatus.findMany({
+            where:{
+                description: status
+            }
+        })
+        if(statusInfo){
+            const update = await prisma.toDo.update({
+                where:{
+                    id
+                },
+                data:{
+                    statusId: statusInfo[0].id
+                }
+         
+            })
+            return update
+        }
+
+    })
+    app.delete("/todos", async (req)=> {
+        const schema = z.object({
+            id: z.string().uuid(),
+        })
+
+        const {id} = schema.parse(req.body)
+
+        const deletedToDo = await prisma.toDo.delete({
+            where:{
+                id
+            }
+        })
+
     })
 }

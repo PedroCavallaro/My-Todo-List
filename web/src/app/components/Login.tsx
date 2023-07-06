@@ -1,11 +1,10 @@
 "use client"
-import { useState } from "react";
-import  Image  from "next/image";
 import { useGoogleLogin } from "@react-oauth/google";
 import { User } from "lucide-react";
 import { api } from "../lib/api";
 import jwtDecode from "jwt-decode";
 import Cookies from "js-cookie"
+import Image from "next/image";
 
 interface userInfo{
     name: string | undefined,
@@ -29,7 +28,8 @@ export default function Login({name, picture, handler}: userInfo) {
                 handler(jwtDecode(data))
             })
         }
-    })        
+    })     
+    console.log(picture)   
     return(
         <>
         {name ? 
@@ -47,8 +47,8 @@ export default function Login({name, picture, handler}: userInfo) {
                     </button>
                 </div>
                 <div className="flex w-14 h-14 items-center justify-center rounded-full bg-white border-1 border-black overflow-hidden">
-                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={picture} width={900} height={900} alt="user Picture"/>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={picture!} width={900} height={900} alt="user Picture"/>
                 </div>
             </div>
         ) : (

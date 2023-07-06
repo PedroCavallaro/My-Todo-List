@@ -35,8 +35,8 @@ interface HandleNewToDo{
 
 export default function AddTodo({handler}: HandleNewToDo) {
 
-    function HandlerNewToDo<T>(toDo: T){
-        handler(toDo)
+    function HandlerNewToDo<T>(){
+        handler()
     }
   
     const {
@@ -53,17 +53,9 @@ export default function AddTodo({handler}: HandleNewToDo) {
     return(
         <>
             <form 
-            onSubmit={handleSubmit(async ({todo})=>{
-                const newTodo: TodosStructure ={
-    
-                    description: todo,
-                    todoStatus:{
-                        description: "Pendente" 
-                    }
-                }
-                
-                createToDo(todo)
-                HandlerNewToDo(newTodo)
+            onSubmit={handleSubmit(async ({todo})=>{  
+                await createToDo(todo)
+                HandlerNewToDo()
                 reset()
             })}
             className="flex flex-col justify-center items-center gap-2 h-[10rem] relative select-none">

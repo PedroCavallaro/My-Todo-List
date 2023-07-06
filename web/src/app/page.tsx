@@ -1,14 +1,13 @@
 "use client"
 import AddTodo from './components/AddTodo'
 import TodoSection from './components/TodoSection'
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo} from 'react';
 import { api } from './lib/api';
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import  cookies  from 'next/headers';
 import Login from './components/Login';
-import NoUser from './components/NoUser';
+import NoUserLogged from './components/NoUserLogged';
 
 
 interface userInfo{
@@ -17,24 +16,49 @@ interface userInfo{
 }
 
 export interface TodosStructure{
+    id: string,
     description: string,                  
     todoStatus:{
         description: string
     }
 }
+const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
 
 export default function Home() {
-  function setNewTodo(toDo: TodosStructure){
-        let newTodoList = [...toDos, toDo ] 
-        setToDos(newTodoList)
+    async function upteTodoOnDb(id: string, status: string) {
+           await api.put("/todos",{
+                id,
+                status
+              },
+              {
+                headers:{
+                    "Authorization": `Bearer ${token}`
+                }
+              }
+              )
     }
-  function updateToDo(toDoDesc: string, status: string){
+    async function updateToDoList(){
+        let token = Cookies.get("token")
+        if(Cookies.get("token")){
+            await api.get("/todos",{
+            headers: {
+                "Authorization": `Bearer ${token}`
+                }
+            })
+            .then(({data}) => {
+                console.log(data)
+                setToDos(data)
+            })
+        }
+    }
+   function updateToDo(status: string, id: string){
       let newTodoList: TodosStructure[] = []
-
       newTodoList = toDos.map((toDo) => {
-          if(toDo.description === toDoDesc){
-              toDo.todoStatus.description = status
-          }
+    
+          if(toDo.id === id){
+              toDo.todoStatus.description = status 
+              upteTodoOnDb(id, status)
+        }
           return toDo
       }) 
 
@@ -64,31 +88,36 @@ export default function Home() {
   return (
     <> 
       <div className="w-[100%] flex justify-end h-[2rem] mt-4">      
-        <GoogleOAuthProvider clientId="388645190987-ehus75pnbprlu662kmhjidimqd4obget.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={`${clientId}`}>
             <Login name={userInfo?.name} picture={userInfo?.picture} handler={getUserInfo}/>        
         </GoogleOAuthProvider>
         </div>
-      <AddTodo handler={setNewTodo}/>
+        <AddTodo handler={updateToDoList}/>
       {userInfo? (
+      <>
       <main className='flex justify-center gap-4 '>
      
         <TodoSection title='Pendente'  
             handleUpdateTodo={updateToDo} 
+            handleDelet={updateToDoList}
             toDos={toDos} 
             iconId={0}/>
         
         <TodoSection title='Em andamento' 
             handleUpdateTodo={updateToDo}
-            toDos={toDos} 
+            handleDelet={updateToDoList}
+            toDos={toDos}
             iconId={1}
         />
         <TodoSection title='Concluidos'
+            handleDelet={updateToDoList}
             handleUpdateTodo={updateToDo}
             toDos={toDos} iconId={2}/>
       </main>
+        </>
       ) : (
         <main className='flex h-[20rem] overflow-hidden justify-center items-center'>
-            <NoUser/>
+            <NoUserLogged/>
         </main>
       )}
     </>
