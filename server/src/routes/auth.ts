@@ -18,20 +18,43 @@ export async function authRoutes(app:FastifyInstance) {
                         "Authorization": `Bearer ${ code }`
                     }
                 })
-            
-            const { name, picture, email, sub } = response.data
+            const responseSchema = z.object({
+                name: z.string(),
+                picture: z.string(),
+                email: z.string().email(),
+                sub: z.string()
+            })
 
-            const user = await prisma.user.create({
-                data:{
-                    name,
-                    picture,
-                    email,
+            const userInfo = responseSchema.parse(response.data)
+            const {name, picture, email, sub } = userInfo
+
+            let user = await prisma.user.findUnique({
+                where:{
                     sub
                 }
             })
-           
-           
-            return user
+
+            if(!user){
+                user = await prisma.user.create({
+                    data:{
+                        name,
+                        picture,
+                        email,
+                        sub
+                    }
+                })
+            }
+
+        const token = app.jwt.sign({
+            name: user.name,
+            picture: user.picture
+        }, {
+            sub: user.id,
+            expiresIn: "30 days"
+        })
+
+        return token
+        
         }
         catch(err){
             return reply.status(404).send()

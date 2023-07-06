@@ -3,6 +3,10 @@ import { prisma } from "../lib/prisma";
 import { z } from "zod"
 
 export async function TodoRoutes(app: FastifyInstance){
+    // app.addHook("preHandler", async (req)=> {
+    //      //    await req.jwtVerify()
+    // })
+    
     app.get("/todos/:id", async (req)=>{
         const schema = z.object({
             id: z.string().uuid()
@@ -38,7 +42,7 @@ export async function TodoRoutes(app: FastifyInstance){
             data:{
                 description,
                 userId: id,
-                statusId: "4e7b0462-c58a-472d-98b2-5467c53a2420"
+                statusId: "86d66a26-cb64-4cb6-8167-0cfe7efc2d14"
             }
         })
 
