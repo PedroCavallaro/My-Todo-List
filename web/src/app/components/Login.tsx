@@ -1,6 +1,7 @@
 "use client"
 import { useGoogleLogin } from "@react-oauth/google";
 import { User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { api } from "../lib/api";
 import jwtDecode from "jwt-decode";
 import Cookies from "js-cookie"
@@ -14,18 +15,19 @@ interface userInfo{
 
 
 export default function Login({name, picture, handler}: userInfo) {
+    const router = useRouter()
     const login = useGoogleLogin({
         onSuccess: async token => {
             const { access_token } = token
-            
+            router.push(`/api/auth?code=${access_token}`)
             await api.post("/auth", {
                 code: access_token
             })  
             .then(({data}) => {
-                Cookies.set("token", data, {
-                    expires: 30
-                })
-                handler(jwtDecode(data))
+                // Cookies.set("token", data, {
+                //     expires: 30
+                // })
+                // handler(jwtDecode(data))
             })
         }
     })     
