@@ -2,16 +2,16 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Profile from "./Profile";
 
 
 interface userInfo{
     name: string | undefined,
     picture: string | undefined,
-    handler: Function
 }
 
 
-export default function Login({name, picture, handler}: userInfo) {
+export default function Login({name, picture}: userInfo) {
     const router = useRouter()
     const login = useGoogleLogin({
         onSuccess: async token => {
@@ -24,18 +24,7 @@ export default function Login({name, picture, handler}: userInfo) {
         {name ? 
         (
             <div className="flex items-center gap-3 text-right mr-5">
-                <div>
-                    <p className="">{`Olá ${name}`}</p>
-                    <a className="text-red-400 cursor-pointer hover:text-red-600 transition-all"
-                    href="/api/auth/logout"
-                    >
-                    Sair
-                    </a>
-                </div>
-                <div className="flex w-14 h-14 items-center justify-center rounded-full bg-white border-1 border-black overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={picture!} width={900} height={900} alt="user Picture"/>
-                </div>
+                <Profile name={name} picture={picture}/>
             </div>
         ) : (
             <div className="flex items-center gap-3 text-right mr-5 text-sm">

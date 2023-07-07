@@ -8,7 +8,7 @@ import jwtDecode from 'jwt-decode';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Login from './components/Login';
 import NoUserLogged from './components/NoUserLogged';
-
+import Profile from './components/Profile';
 
 interface userInfo{
   name: string,
@@ -69,7 +69,6 @@ export default function Home() {
   }
   const [toDos, setToDos] = useState<TodosStructure[]>([])
   const [userInfo, setUserInfo] = useState<userInfo>()
-
   
   let token = Cookies.get("token")
 
@@ -87,9 +86,10 @@ export default function Home() {
 
   return (
     <> 
-      <div className="w-[100%] flex justify-end h-[2rem] mt-4">      
+      <div className="w-[100%] flex justify-end h-[2rem] mt-4">  
+        
         <GoogleOAuthProvider clientId={`${clientId}`}>
-            <Login name={userInfo?.name} picture={userInfo?.picture} handler={getUserInfo}/>        
+            <Login name={userInfo?.name} picture={userInfo?.picture}/>        
         </GoogleOAuthProvider>
         </div>
         <AddTodo handler={updateToDoList}/>
